@@ -79,3 +79,11 @@ canvas {
 #restartButton:hover {
     background: #45a049;
 }
+
+#coins {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    color: gold;
+    font-size: 24px;
+}
