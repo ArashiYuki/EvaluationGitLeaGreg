@@ -55,3 +55,19 @@ canvas {
     background: rgba(0, 0, 0, 0.7);
     z-index: -1;
 }
+
+#restartButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 24px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#restartButton:hover {
+    background: #45a049;
+}
