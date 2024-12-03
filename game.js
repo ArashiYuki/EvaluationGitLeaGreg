@@ -13,10 +13,57 @@ class Game {
             speed: 5
         };
 
+		this.projectiles = [];
+		this.projectileSpeed = 7;
+        this.fireRateLevel = 1;
+        this.projectileSpeedLevel = 1;
+
+		this.startAutoFire();
+
 		this.gameLoop();
 
 		// Gestionnaires d'événements
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    }
+
+	startAutoFire() {
+        // Supprimer l'ancien interval s'il existe
+        if (this.fireInterval) {
+            clearInterval(this.fireInterval);
+        }
+
+        // Créer un nouvel interval unique
+        this.fireInterval = setInterval(() => {
+            if (!this.isGameOver) {
+                this.projectiles.push({
+                    x: this.cannon.x,
+                    y: this.cannon.y,
+                    radius: 5,
+                    speed: this.projectileSpeed
+                });
+            }
+        }, this.fireRate);
+    }
+
+	shoot() {
+        const now = Date.now();
+        if (now - this.lastShot >= this.fireRate) {
+            this.projectiles.push({
+                x: this.cannon.x,
+                y: this.cannon.y,
+                radius: 5,
+                speed: this.projectileSpeed
+            });
+            this.lastShot = now;
+        }
+    }
+
+	update() {
+        this.projectiles.forEach(projectile => {
+            projectile.y -= projectile.speed;  // Cette ligne est correcte
+        });
+
+        this.projectiles = this.projectiles.filter(proj => proj.y > -10);
     }
 
 	handleMouseMove(event) {
@@ -25,7 +72,6 @@ class Game {
 
 		// Limiter le canon dans les bordures du canvas
 		this.cannon.x = Math.max(this.cannon.width / 2, Math.min(mouseX, this.canvas.width - this.cannon.width / 2));
-		console.log(this.cannon.x);
     }
 
     draw() {
@@ -35,9 +81,19 @@ class Game {
         this.ctx.fillStyle = 'green';
         this.ctx.fillRect(this.cannon.x - this.cannon.width / 2, this.cannon.y,
             this.cannon.width, this.cannon.height);
+
+		// Projectiles
+        this.projectiles.forEach(projectile => {
+            this.ctx.beginPath();
+            this.ctx.arc(projectile.x, projectile.y, projectile.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = 'yellow';
+            this.ctx.fill();
+            this.ctx.closePath();
+        });
     }
 
 	gameLoop() {
+		this.update();
 		this.draw();
 		requestAnimationFrame(this.gameLoop.bind(this));
     }
