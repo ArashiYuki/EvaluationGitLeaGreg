@@ -23,6 +23,7 @@ class Game {
         this.lastShot = 0;
         this.spawnRate = 3000;
         this.minSpawnRate = 500;
+		this.coins = 0;
 
         this.startAutoFire();
 
@@ -63,6 +64,7 @@ class Game {
         this.projectiles = [];
         this.isGameOver = false;
         this.spawnRate = 3000;
+		this.coins = 0;
         clearInterval(this.ballSpawnInterval);
         this.ballSpawnInterval = setInterval(() => {
             if (!this.isGameOver) this.createBall();
@@ -140,6 +142,7 @@ class Game {
                     ball.health--;
                     if (ball.health <= 0) {
                         this.balls.splice(ballIndex, 1);
+						this.coins += 10;
                     }
                     this.projectiles.splice(projectileIndex, 1);
                 }
@@ -168,10 +171,12 @@ class Game {
         });
 
         this.projectiles.forEach(projectile => {
-            projectile.y -= projectile.speed;  // Cette ligne est correcte
+            projectile.y -= projectile.speed;
         });
 
         this.projectiles = this.projectiles.filter(proj => proj.y > -10);
+
+		document.getElementById('coinsValue').textContent = this.coins;
     }
 
     draw() {
