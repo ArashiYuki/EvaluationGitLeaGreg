@@ -16,6 +16,7 @@ class Game {
         this.balls = [];
         this.projectiles = [];
         this.isGameOver = false;
+        this.score = 0;
         this.fireRate = 250;
         this.projectileSpeed = 7;
         this.fireRateLevel = 1;
@@ -62,11 +63,13 @@ class Game {
         this.balls = [];
         this.projectiles = [];
         this.isGameOver = false;
+        this.score = 0;
         this.spawnRate = 3000;
         clearInterval(this.ballSpawnInterval);
         this.ballSpawnInterval = setInterval(() => {
             if (!this.isGameOver) this.createBall();
         }, this.spawnRate);
+        document.getElementById('scoreValue').textContent = this.score;
         this.gameLoop();
     }
 
@@ -140,6 +143,8 @@ class Game {
                     ball.health--;
                     if (ball.health <= 0) {
                         this.balls.splice(ballIndex, 1);
+                        this.score += 100;
+                        document.getElementById('scoreValue').textContent = this.score;
                     }
                     this.projectiles.splice(projectileIndex, 1);
                 }
